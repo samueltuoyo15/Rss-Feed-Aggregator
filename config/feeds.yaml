@@ -1,0 +1,7 @@
+feeds:
+  - name: "TechCrunch"
+    url: "https://techcrunch.com/feed/"
+  - name: "BBC News"
+    url: "http://feeds.bbci.co.uk/news/rss.xml"
+  - name: "Hacker News"
+    url: "https://news.ycombinator.com/rss"
