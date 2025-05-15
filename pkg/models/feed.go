@@ -8,5 +8,6 @@ type Feed struct {
 type FeedItem struct {
   Title string `"json:title"`
   Link string `"json:link"`
+  PublishedAt string `"json:published"`
   Description string `"json:description"`
 }
