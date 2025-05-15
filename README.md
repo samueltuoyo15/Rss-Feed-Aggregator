@@ -2,6 +2,9 @@
 
 Aggregates and displays RSS feeds from various sources in a clean, readable format. Stay updated with the latest news from TechCrunch, BBC, Hacker News, and more!
 
+### Demo
+![Demo](./public/demo.png)
+
 ## 🛠️ Installation
 
 Follow these steps to get the project up and running on your local machine.
