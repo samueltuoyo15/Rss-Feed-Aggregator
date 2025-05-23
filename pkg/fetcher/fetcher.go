@@ -29,6 +29,13 @@ func FetchAll(feeds []models.Feed) (map[string][]models.FeedItem, error) {
 
 			var items []models.FeedItem
 			for _, item := range parsed.Items {
+				thumbnailUrl := ""
+				if mediaExt, ok := item.Extensions["media"]; ok {
+					if thumbs, ok := mediaExt["thumbnail"]; ok && len(thumbs) > 0 {
+						thumbnailUrl = thumbs[0].Attrs["url"]
+					}
+				}
+
 				feedItem := models.FeedItem{
 					Title: item.Title,
 					Link: item.Link,
@@ -37,19 +44,14 @@ func FetchAll(feeds []models.Feed) (map[string][]models.FeedItem, error) {
 					Categories: item.Categories,
 					Content: item.Content,
 					Author: item.Author,
-					Image: item.Image,
+					ThumbnailUrl: thumbnailUrl, 
 					GUID: item.GUID,
 				}
 
-				if item.Image != nil {
-					feedItem.Image = item.Image
-				} else if len(item.Enclosures) > 0 {
+				if thumbnailUrl == "" && len(item.Enclosures) > 0 {
 					for _, enc := range item.Enclosures {
 						if strings.HasPrefix(enc.Type, "image/") {
-							feedItem.Image = &gofeed.Image{
-								URL:   enc.URL,
-								Title: "",
-							}
+							feedItem.ThumbnailUrl = enc.URL
 							break
 						}
 					}

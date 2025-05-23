@@ -15,6 +15,6 @@ type FeedItem struct {
   Categories []string `json:"categories"`
   Content string `json:"content"`
   Author *gofeed.Person `json:"author"`
-  Image *gofeed.Image `json:"image"`
+  ThumbnailUrl string `json:"thumbnail_url"`
   GUID string `json:"guid"`
 }
