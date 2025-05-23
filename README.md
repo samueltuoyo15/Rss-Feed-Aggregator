@@ -1,112 +1,90 @@
-# 🚀 Rss-Feed-Aggregator 📰
+# 🚀 Rss Feed Aggregator
 
-Aggregates and displays RSS feeds from various sources in a clean, readable format. Stay updated with the latest news from TechCrunch, BBC, Hacker News, and more!
+Aggregates RSS feeds from various sources into a single, streamlined view! 📰✨
 
-### Demo
-![Demo](./public/demo.png)
+## Description
 
-## 🛠️ Installation
+This project is a Go-based RSS Feed Aggregator that fetches and displays the latest news and content from various sources. It's designed to be lightweight, easy to use, and provides a customizable way to stay updated with your favorite websites and blogs. 🚀
 
-Follow these steps to get the project up and running on your local machine.
+## Installation
 
-- **Clone the Repository**:
+Follow these steps to set up the project locally:
+
+- ⬇️ **Clone the Repository**:
   ```bash
   git clone https://github.com/samueltuoyo15/Rss-Feed-Aggregator.git
   ```
-- **Navigate to the Project Directory**:
+- ⚙️ **Navigate to the Project Directory**:
   ```bash
   cd Rss-Feed-Aggregator
   ```
-- **Build the Project**:
+- 📦 **Download Dependencies**:
   ```bash
-  go build -o rss-aggregator ./cmd/server/main.go
+  go mod download
   ```
-- **Run the Application**:
+- 🔨 **Build the Application**:
   ```bash
-  ./rss-aggregator
+  go build -o main ./cmd/main.go
+  ```
+- 🚀 **Run the Application**:
+  ```bash
+  ./main
   ```
 
-## 💡 Usage
-
-To use the RSS Feed Aggregator:
+## Usage
 
 1.  **Configuration**:
-
-*   Modify the `config/feeds.yaml` file to add or remove RSS feeds.
-*   Ensure the YAML file is correctly formatted with the `name` and `url` for each feed.
-
-2.  **Running the Application**:
-
-*   Execute the compiled binary:
-
-```bash
-./rss-aggregator
-```
-
-*   The application will fetch and display the latest articles from the configured feeds.
-
-<details>
-<summary>Detailed Instructions</summary>
-
-1.  **Customize Feeds**:
-
-    *   Open `config/feeds.yaml` in a text editor.
-    *   Add or remove feeds as needed:
-
+    -   Edit the `config/feeds.yaml` file to add or modify the RSS feeds you want to aggregate.
     ```yaml
     feeds:
-      - name: "TechCrunch"
-        url: "https://techcrunch.com/feed/"
-      - name: "BBC News"
-        url: "http://feeds.bbci.co.uk/news/rss.xml"
-      - name: "Hacker News"
-        url: "https://news.ycombinator.com/rss"
+        - name: "TechCrunch"
+          url: "https://techcrunch.com/feed/"
+        - name: "Hacker News"
+          url: "https://news.ycombinator.com/rss"
     ```
 
-2.  **Run the Aggregator**:
+2.  **Running the Application**:
+    -   Once the application is running, open your web browser and go to `http://localhost:8080` to view the aggregated feeds.
 
-    *   Execute the compiled binary:
+3.  **API Endpoint**:
+    -   You can also fetch the feeds in JSON format by sending a request to the `/api/feeds` endpoint.
 
-    ```bash
-    ./rss-aggregator
-    ```
+## Features
 
-    *   The application will output the latest articles from each feed, formatted for easy reading.
+-   📰 **Aggregated Feeds**: Fetches and combines RSS feeds from multiple sources.
+-   ⚙️ **Configurable**: Easily add or remove feeds by modifying the `config/feeds.yaml` file.
+-   ⚡️ **Lightweight**: Built with Go for performance and efficiency.
+-   📱 **Responsive**: Displays feeds in a user-friendly format, optimized for different screen sizes.
+-   ✨ **Htmx Enhanced**: Uses Htmx to enhance the web page.
 
-</details>
+## Technologies Used
 
-## ✨ Features
+| Technology  | Description                                                        |
+| :---------- | :----------------------------------------------------------------- |
+| Go          | Backend logic and server                                           |
+| YAML        | Configuration file format                                          |
+| HTML/CSS    | Frontend structure and styling                                     |
+| JavaScript  | Additional frontend interactivity                                   |
+| Docker      | Containerization for easy deployment                               |
+| gofeed      | RSS parsing library                                               |
+| HTMX        | Library that allows access to AJAX, CSS Transitions, WebSockets and Server Sent Events directly in HTML. |
+## Contributing
 
-- 📰 Fetches and aggregates RSS feeds from multiple sources.
-- ⚙️ Configurable feed sources via `config/feeds.yaml`.
-- 🔗 Displays article titles and links in a readable format.
-- 🚀 Simple and easy to use.
+We welcome contributions to the Rss Feed Aggregator project! Here's how you can help:
 
-## 💻 Technologies Used
+-   🐛 **Report Bugs**: Submit detailed bug reports to help us identify and fix issues.
+-   🛠️ **Suggest Enhancements**: Propose new features or improvements to make the aggregator even better.
+-   🧑‍💻 **Submit Pull Requests**: Contribute code changes to address bugs or implement new features.
 
-| Technology | Link                               |
-| :--------- | :--------------------------------- |
-| Go         | [https://golang.org/](https://golang.org/) |
-| gofeed     | [https://github.com/mmcdole/gofeed](https://github.com/mmcdole/gofeed) |
-| yaml.v3    | [https://github.com/go-yaml/yaml](https://github.com/go-yaml/yaml) |
+## License
 
-## 🤝 Contributing
+This project is licensed under the [MIT License](LICENSE).
 
-Contributions are welcome! Here's how you can contribute:
+## Author Info
 
-- 🐛 **Report Bugs**: Submit detailed bug reports to help improve the project.
-- 🛠️ **Suggest Enhancements**: Propose new features or improvements.
-- 🚀 **Submit Pull Requests**: Contribute code by submitting pull requests.
-
-
-## 🧑‍💻 Author Info
-
-- Author: Samuel Tuoyo
-  - Twitter: [https://x.com/TuoyoS26091]
-  - LinkedIn: [https://www.linkedin.com/in/samuel-tuoyo-8568b62b6]
-
-[![Go](https://img.shields.io/badge/Go-1.21.x-00ADD8?logo=go&logoColor=white)](https://go.dev/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub issues](https://img.shields.io/github/issues/samueltuoyo15/Rss-Feed-Aggregator)](https://github.com/samueltuoyo15/Rss-Feed-Aggregator/issues)
+-   Name: Samuel Tuoyo
+-   GitHub: [Your GitHub Profile](https://github.com/samueltuoyo15)
+-   Twitter: [Your Twitter Profile](https://twitter.com/your-twitter-handle)
+-   LinkedIn: [Your LinkedIn Profile](https://linkedin.com/in/your-linkedin-profile)
 
 [![Readme was generated by Dokugen](https://img.shields.io/badge/Readme%20was%20generated%20by-Dokugen-brightgreen)](https://www.npmjs.com/package/dokugen)
