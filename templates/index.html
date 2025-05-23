@@ -20,9 +20,10 @@
   font-style: normal;
   } 
   .htmx-indicator {
-    display: none;
+    opacity: 0;
+    transition: opacity 200ms ease-in;
   }
-  .htmx-indicator, .htmx-request.htmx-indicator{
+  .htmx-request .htmx-indicator, .htmx-request.htmx-indicator{
     display: block;
   }
 
@@ -39,9 +40,8 @@
     </div>
   </header>
    
-   <div hx-get="/api/feeds" hx-trigger="load" hx-target="#feed-container" htmx-indicator=".htmx-indicator"></div>
    
-    <section id="feed-container" class="mx-auto md:w-[700px] p-4 space-y-4">
+    <section hx-get="/api/feeds" hx-trigger="load" htmx-indicator=".htmx-indicator" hx-swap="innerHTML" hx-on:htmx:after-request="if(event.detail.failed) console.error('Request failed', event.detail')" class="mx-auto md:w-[700px] p-4 space-y-4">
     <article class="w-full p-4 bg-white rounded-lg border border-gray-200 animate-pulse">
       <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
       <div class="h-3 bg-gray-200 rounded w-full mb-1"></div>

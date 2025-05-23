@@ -39,7 +39,25 @@ func feedFetcher(w http.ResponseWriter, r *http.Request) {
 }
 
 func renderFeedItems(w http.ResponseWriter, feeds map[string][]models.FeedItem) {
-	tmpl := template.Must(template.New("feed-items").Parse(`
+	funcMap := template.FuncMap(template.FuncMap{
+		"formatDate": func(t string) string {
+			parsed, err := time.Parse(time.RFC1123Z, t)
+			if err != nil {
+				parsed, err = time.Parse(time.RFC1123, t)
+				if err != nil {
+					return t 
+				}
+			}
+			return parsed.Format("Jan 2, 2006")
+		},
+		"truncate": func(s string, length int) string {
+			if len(s) <= length {
+				return s
+			}
+			return s[:length] + "..."
+		},
+	})
+	tmpl := template.Must(template.New("feed-items").Funcs(funcMap).Parse(`
 		{{ range $source, $items := . }}
 			{{ range $items }}
 				<article class="w-full p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
@@ -97,25 +115,6 @@ func renderFeedItems(w http.ResponseWriter, feeds map[string][]models.FeedItem) 
 		{{ end }}
 	`))
 
-
-	tmpl.Funcs(template.FuncMap{
-		"formatDate": func(t string) string {
-			parsed, err := time.Parse(time.RFC1123Z, t)
-			if err != nil {
-				parsed, err = time.Parse(time.RFC1123, t)
-				if err != nil {
-					return t 
-				}
-			}
-			return parsed.Format("Jan 2, 2006")
-		},
-		"truncate": func(s string, length int) string {
-			if len(s) <= length {
-				return s
-			}
-			return s[:length] + "..."
-		},
-	})
 
 	w.Header().Set("Content-Type", "text/html")
 	if err := tmpl.Execute(w, feeds); err != nil {
