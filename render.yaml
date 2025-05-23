@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: rss-feed-aggregator
+    env: go
+    build:
+      go:
+        version: 1.24.2
+    buildCommand: go mod tidy && go build -o ./app ./cmd/main.go
+    startCommand: ./app
