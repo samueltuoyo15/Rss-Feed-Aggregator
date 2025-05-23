@@ -4,13 +4,72 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rss Feed Aggregator</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Agdasima:wght@400;700&family=Geist:wght@100..900&family=Permanent+Marker&display=swap" rel="stylesheet">
   <meta name="author" content="Samuel Tuoyo">
   <meta name="description" content="A minimal RSS feed reader">
   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  <style>
+   body {
+  font-family: "Geist", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  } 
+ </style>
 </head>
-  <body>
-    
-  </body>
+<body class="bg-[#f5f5f5]">
+  <header class="sticky top-0 z-10 p-4 bg-white shadow-md">
+    <h1 class="font-extrabold text-2xl text-gray-800">Sams Rss Aggregator</h1>
+  </header>
+  
+  <section class="mx-auto md:w-[700px] p-4 space-y-4">
+    <article class="w-full p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+      <div class="flex items-center gap-2 mb-2">
+       <span class="px-2 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-800 animate-pulse">
+          Technology
+        </span>
+        <time class="text-xs italic text-gray-400">over 1 year ago</time>
+        <span class="text-xs text-gray-500 ml-auto">TechCrunch</span>
+      </div>
+      <h2 class="text-lg font-bold text-gray-900">Apple Unveils New MacBook Pro with M3 chip</h2>
+      <p class="mt-1 text-gray-600 line-clamp-2">
+        Apple has announced the release of the new MacBook Pro lineup featuring the M3 chip...
+      </p>
+      
+      <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+        <div class="flex space-x-4">
+          <button class="flex items-center text-gray-500 hover:text-gray-700 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            24
+          </button>
+          <button class="flex items-center text-gray-500 hover:text-gray-700 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+            156
+          </button>
+        </div>
+        
+        <div class="flex space-x-2">
+          <button class="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+            </svg>
+          </button>
+          <button class="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </article>
+  </section>
+</body>
 </html>
