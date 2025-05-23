@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rss Feed Aggregator</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Agdasima:wght@400;700&family=Geist:wght@100..900&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <meta name="author" content="Samuel Tuoyo">
+  <meta name="description" content="A minimal RSS feed reader">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  <style>
+   body {
+  font-family: "Geist", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  } 
+  .htmx-indicator {
+    display: none;
+  }
+  .htmx-indicator, .htmx-request.htmx-indicator{
+    display: block;
+  }
+
+ </style>
+</head>
+<body class="bg-[#f5f5f5]">
+  <header class="sticky top-0 z-10 p-4 bg-white shadow-md">
+    <h1 class="font-extrabold text-2xl text-gray-800">Sams Rss Aggregator</h1>
+    <div class="htmx-indicator flex justify-center my-4">
+      <svg class="animate-spin h-8 w-8 text-amber-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </div>
+  </header>
+   
+   <div hx-get="/api/feeds" hx-trigger="load" hx-target="#feed-container" htmx-indicator=".htmx-indicator"></div>
+   
+    <section id="feed-container" class="mx-auto md:w-[700px] p-4 space-y-4">
+    <article class="w-full p-4 bg-white rounded-lg border border-gray-200 animate-pulse">
+      <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+      <div class="h-3 bg-gray-200 rounded w-full mb-1"></div>
+      <div class="h-3 bg-gray-200 rounded w-5/6"></div>
+    </article>
+  </section>
+</body>
+</html>
+
