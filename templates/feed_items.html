@@ -1,43 +1,49 @@
 {{ define "feed-items" }}
-{{ range $source, $items := . }}
+<div class="w-full grid bg-[#1E2126] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  {{ range $source, $items := . }}
     {{ range $items }}
-        <article class="w-full p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-            {{ if .ThumbnailUrl }}
-            <div class="mb-3">
-                <img src="{{ .ThumbnailUrl }}" alt="{{ .Title }}" 
-                     class="w-full h-48 object-cover rounded-lg">
-            </div>
+      <article class="bg-[#2E3036] border border-gray-600 rounded-xl shadow hover:shadow-xl transition-shadow duration-300 flex flex-col h-full text-gray-100 hover:scale-[1.01] transform transition-transform ease-out">
+        
+        {{ if .ThumbnailUrl }}
+          <img src="{{ .ThumbnailUrl }}" alt="{{ .Title }}"
+               class="w-full h-56 object-cover rounded-t-xl" loading="lazy" />
+        {{ end }}
+
+        <div class="p-4 flex flex-col flex-grow">
+          <div class="flex items-center gap-2 mb-3">
+            {{ if .Categories }}
+              <span class="bg-amber-200 text-amber-900 text-xs font-semibold px-2 py-1 rounded-full">
+                {{ index .Categories 0 }}
+              </span>
             {{ end }}
-            
-            <div class="flex items-center gap-2 mb-2">
-                {{ if .Categories }}
-                <span class="px-2 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-800">
-                    {{ index .Categories 0 }}
-                </span>
-                {{ end }}
-                <time class="text-xs italic text-gray-400">
-                    {{ if .PublishedAt }}
-                        {{ formatDate .PublishedAt }}
-                    {{ else }}
-                        Unknown date
-                    {{ end }}
-                </time>
-                <span class="text-xs text-gray-500 ml-auto">{{ $source }}</span>
-            </div>
-            
-            <h2 class="text-lg font-bold text-gray-900">
-                <a href="{{ .Link }}" target="_blank" rel="noopener noreferrer">{{ .Title }}</a>
-            </h2>
-            
-            <p class="mt-1 text-gray-600 line-clamp-2">
-                {{ if .Description }}
-                    {{ .Description }}
-                {{ else if .Content }}
-                    {{ truncate .Content 150 }}
-                {{ end }}
-            </p>
-            </div>
-        </article>
+
+            <time class="text-xs italic text-gray-400">
+              {{ if .PublishedAt }}
+                {{ formatDate .PublishedAt }}
+              {{ else }}
+                Unknown date
+              {{ end }}
+            </time>
+
+            <span class="text-xs text-gray-400 ml-auto font-medium">{{ $source }}</span>
+          </div>
+
+          <h2 class="text-base sm:text-lg font-bold text-white hover:text-amber-400 transition-colors leading-snug">
+            <a href="{{ .Link }}" target="_blank" rel="noopener noreferrer">
+              {{ .Title }}
+            </a>
+          </h2>
+
+          <p class="mt-2 text-sm text-gray-300 line-clamp-3 leading-relaxed flex-grow">
+            {{ if .Description }}
+              {{ .Description }}
+            {{ else if .Content }}
+              {{ truncate .Content 150 }}
+            {{ end }}
+          </p>
+        </div>
+      </article>
     {{ end }}
-{{ end }}
+  {{ end }}
+</div>
 {{ end }}
