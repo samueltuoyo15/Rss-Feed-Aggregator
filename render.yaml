@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: rss-aggregator
-    dockerfilePath: Dockerfile
-    envVars:
-      - key: PORT
-        value: 8080

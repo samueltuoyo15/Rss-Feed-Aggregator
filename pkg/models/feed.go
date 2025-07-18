@@ -18,3 +18,8 @@ type FeedItem struct {
   ThumbnailUrl string `json:"thumbnail_url"`
   GUID string `json:"guid"`
 }
+
+type FeedWithItems struct {
+    Feed Feed
+    Items []FeedItem
+}

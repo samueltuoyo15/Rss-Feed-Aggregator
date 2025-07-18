@@ -13,7 +13,7 @@ import (
 )
 
 type TemplateData struct {
-	Feeds map[string][]models.FeedItem
+	Feeds []models.FeedWithItems
 }
 
 func feedFetcher(w http.ResponseWriter, r *http.Request) {
@@ -23,23 +23,27 @@ func feedFetcher(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	results, err := fetcher.FetchAll(feeds)
+	sortedResults, _, err := fetcher.FetchAll(feeds)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to fetch Feeds: %v", err), http.StatusInternalServerError)
 		return
 	}
 
 	if r.Header.Get("HX-Request") == "true" {
-		renderFeedItems(w, results)
+		if err := renderFeedItems(w, sortedResults); err != nil {
+			log.Printf("Template rendering error: %v", err)
+		}
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(results)
+	if err := json.NewEncoder(w).Encode(sortedResults); err != nil {
+		log.Printf("JSON encoding error: %v", err)
+	}
 }
 
-func renderFeedItems(w http.ResponseWriter, feeds map[string][]models.FeedItem) {
-	funcMap := template.FuncMap(template.FuncMap{
+func renderFeedItems(w http.ResponseWriter, feeds []models.FeedWithItems) error {
+	funcMap := template.FuncMap{
 		"formatDate": func(t string) string {
 			parsed, err := time.Parse(time.RFC1123Z, t)
 			if err != nil {
@@ -56,18 +60,27 @@ func renderFeedItems(w http.ResponseWriter, feeds map[string][]models.FeedItem) 
 			}
 			return s[:length] + "..."
 		},
-	})
-	tmpl := template.Must(template.New("feed-items").Funcs(funcMap).ParseFiles(`templates/feed_items.html`))
-	w.Header().Set("Content-Type", "text/html")
-	if err := tmpl.Execute(w, feeds); err != nil {
-		http.Error(w, "Error rendering template", http.StatusInternalServerError)
 	}
+
+	tmpl, err := template.New("feed-items").Funcs(funcMap).ParseFiles("templates/feed_items.html")
+	if err != nil {
+		return fmt.Errorf("template parsing error: %w", err)
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	if err := tmpl.Execute(w, TemplateData{Feeds: feeds}); err != nil {
+		return fmt.Errorf("template execution error: %w", err)
+	}
+	return nil
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("templates/index.html"))
 	w.Header().Set("Content-Type", "text/html")
-	tmpl.Execute(w, nil)
+	if err := tmpl.Execute(w, nil); err != nil {
+		log.Printf("Home template error: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
 }
 
 func main() {

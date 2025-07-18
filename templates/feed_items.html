@@ -1,7 +1,7 @@
 {{ define "feed-items" }}
 <div class="w-full grid bg-[#1E2126] grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-  {{ range $source, $items := . }}
-    {{ range $items }}
+  {{ range .Feeds }}
+    {{ range .Items }}
       <article class="bg-[#2E3036] border border-gray-600 rounded-xl shadow hover:shadow-xl transition-shadow duration-300 flex flex-col h-full text-gray-100 hover:scale-[1.01] transform transition-transform ease-out">
         
         {{ if .ThumbnailUrl }}
@@ -25,7 +25,7 @@
               {{ end }}
             </time>
 
-            <span class="text-xs text-gray-400 ml-auto font-medium">{{ $source }}</span>
+            <span class="text-xs text-gray-400 ml-auto font-medium">{{ .Title }}</span>
           </div>
 
           <h2 class="text-base sm:text-lg font-bold text-white hover:text-amber-400 transition-colors leading-snug">

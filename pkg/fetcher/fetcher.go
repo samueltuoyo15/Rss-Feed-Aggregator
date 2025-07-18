@@ -2,23 +2,29 @@ package fetcher
 
 import (
 	"log"
+	"net/http"
+	"sort"
 	"strings"
 	"sync"
+	"time"
+	"github.com/PuerkitoBio/goquery"
 	"github.com/mmcdole/gofeed"
 	"github.com/samueltuoyo15/Rss-Feed-Aggregator/pkg/models"
 )
 
-func FetchAll(feeds []models.Feed) (map[string][]models.FeedItem, error) {
+func FetchAll(feeds []models.Feed) ([]models.FeedWithItems, map[string][]models.FeedItem, error) {
 	var (
 		wg sync.WaitGroup
 		mu sync.Mutex
 		parser = gofeed.NewParser()
-		results = make(map[string][]models.FeedItem)
+		client = &http.Client{Timeout: 10 * time.Second}
+		results = make([]models.FeedWithItems, len(feeds))
+		feedMap = make(map[string][]models.FeedItem)
 	)
 
-	for _, feed := range feeds {
+	for i, feed := range feeds {
 		wg.Add(1)
-		go func(f models.Feed) {
+		go func(i int, f models.Feed) {
 			defer wg.Done()
 
 			parsed, err := parser.ParseURL(f.Url)
@@ -29,14 +35,12 @@ func FetchAll(feeds []models.Feed) (map[string][]models.FeedItem, error) {
 
 			var items []models.FeedItem
 			for _, item := range parsed.Items {
-				thumbnailUrl := ""
-				if mediaExt, ok := item.Extensions["media"]; ok {
-					if thumbs, ok := mediaExt["thumbnail"]; ok && len(thumbs) > 0 {
-						thumbnailUrl = thumbs[0].Attrs["url"]
-					}
+				thumbnailUrl := extractThumbnail(item)
+				if thumbnailUrl == "" && strings.Contains(f.Url, "techcrunch.com") {
+					thumbnailUrl = getTechCrunchThumbnail(item.Link, client)
 				}
 
-				feedItem := models.FeedItem{
+				items = append(items, models.FeedItem{
 					Title: item.Title,
 					Link: item.Link,
 					PublishedAt: item.Published,
@@ -44,28 +48,73 @@ func FetchAll(feeds []models.Feed) (map[string][]models.FeedItem, error) {
 					Categories: item.Categories,
 					Content: item.Content,
 					Author: item.Author,
-					ThumbnailUrl: thumbnailUrl, 
+					ThumbnailUrl: thumbnailUrl,
 					GUID: item.GUID,
-				}
-
-				if thumbnailUrl == "" && len(item.Enclosures) > 0 {
-					for _, enc := range item.Enclosures {
-						if strings.HasPrefix(enc.Type, "image/") {
-							feedItem.ThumbnailUrl = enc.URL
-							break
-						}
-					}
-				}
-
-				items = append(items, feedItem)
+				})
 			}
 
 			mu.Lock()
-			results[f.Name] = items
+			results[i] = models.FeedWithItems{
+				Feed: f,
+				Items: items,
+			}
+			feedMap[f.Name] = items
 			mu.Unlock()
-		}(feed)
+		}(i, feed)
 	}
 
 	wg.Wait()
-	return results, nil
+
+	sort.Slice(results, func(i, j int) bool {
+		isTechCrunchI := strings.Contains(results[i].Feed.Url, "techcrunch.com")
+		isTechCrunchJ := strings.Contains(results[j].Feed.Url, "techcrunch.com")
+		if isTechCrunchI && !isTechCrunchJ {
+			return true
+		}
+		if !isTechCrunchI && isTechCrunchJ {
+			return false
+		}
+		return results[i].Feed.Name < results[j].Feed.Name
+	})
+
+	return results, feedMap, nil
+}
+
+func extractThumbnail(item *gofeed.Item) string {
+	if mediaExt, ok := item.Extensions["media"]; ok {
+		if thumbs, ok := mediaExt["thumbnail"]; ok && len(thumbs) > 0 {
+			return thumbs[0].Attrs["url"]
+		}
+	}
+	for _, enc := range item.Enclosures {
+		if strings.HasPrefix(enc.Type, "image/") {
+			return enc.URL
+		}
+	}
+	return ""
+}
+
+func getTechCrunchThumbnail(url string, client *http.Client) string {
+	resp, err := client.Get(url)
+	if err != nil {
+		return ""
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return ""
+	}
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		return ""
+	}
+	if ogImage, exists := doc.Find("meta[property='og:image']").Attr("content"); exists {
+		return ogImage
+	}
+	if twitterImage, exists := doc.Find("meta[name='twitter:image']").Attr("content"); exists {
+		return twitterImage
+	}
+	if featuredImage, exists := doc.Find("img.featured-image").Attr("src"); exists {
+		return featuredImage
+	}
+	return ""
 }
