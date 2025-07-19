@@ -127,7 +127,7 @@ This project is open-source and released under an [MIT License](https://opensour
 
 A passionate developer with a keen interest in building efficient and scalable applications.
 
-*   X: [X](https://x.com/TuoyoS26091)
+* [X](https://x.com/TuoyoS26091)
 
 ---
 
