@@ -90,8 +90,8 @@ func main() {
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/api/feeds", feedFetcher)
 
-	fmt.Printf("Server is running on port 8080\n")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	fmt.Printf("Server is running on port 5000\n")
+	if err := http.ListenAndServe(":5000", nil); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -1,0 +1,20 @@
+services: 
+  instance1:
+    build: .
+    environment: 
+      - INSTANCE_NAME=instance1
+    ports:
+      - 5001:5000
+  instance2:
+    build: .
+    environment:
+      - INSTANCE_NAME=instance2
+    ports: 
+      - 5002:5000
+
+  instance3:
+    build: .
+    environment:
+      - INSTANCE_NAME=instance3
+    ports:
+      - 5003:5000
