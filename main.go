@@ -6,7 +6,9 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"time"
+
 	"github.com/samueltuoyo15/Rss-Feed-Aggregator/pkg/fetcher"
 	"github.com/samueltuoyo15/Rss-Feed-Aggregator/pkg/models"
 	"github.com/samueltuoyo15/Rss-Feed-Aggregator/pkg/parser"
@@ -49,7 +51,7 @@ func renderFeedItems(w http.ResponseWriter, feeds []models.FeedWithItems) error 
 			if err != nil {
 				parsed, err = time.Parse(time.RFC1123, t)
 				if err != nil {
-					return t 
+					return t
 				}
 			}
 			return parsed.Format("Jan 2, 2006")
@@ -75,6 +77,7 @@ func renderFeedItems(w http.ResponseWriter, feeds []models.FeedWithItems) error 
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Request received from " + os.Getenv("INSTANCE_NAME"))
 	tmpl := template.Must(template.ParseFiles("templates/index.html"))
 	w.Header().Set("Content-Type", "text/html")
 	if err := tmpl.Execute(w, nil); err != nil {
@@ -90,7 +93,7 @@ func main() {
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/api/feeds", feedFetcher)
 
-	fmt.Printf("Server is running on port 5000\n")
+	fmt.Printf(os.Getenv("INSTANCE_NAME") + " is running on port 5000\n")
 	if err := http.ListenAndServe(":5000", nil); err != nil {
 		log.Fatal(err)
 	}
